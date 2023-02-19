@@ -12,17 +12,22 @@ const wind = document.querySelector('.wind');
 const humidity = document.querySelector('.humidity');
 const weatherDescription = document.querySelector('.weather-description');
 const city = document.querySelector('.city');
-let prevCity = city.value;
+const quotes = 'assets/quotes.json';
+const quote = document.querySelector('.quote');
+const author = document.querySelector('.author');
+const quoteButton = document.querySelector('.change-quote');
 
 window.addEventListener('beforeunload', setLocalStorage);
 window.addEventListener('load', getLocalStorage);
 slidePrev.addEventListener('click', getSlidePrev)
 slideNext.addEventListener('click', getSlideNext)
 city.addEventListener('change', getWeather);
+quoteButton.addEventListener('click', getQuotes);
 
 showTime();
 setBackground();
 getWeather();
+getQuotes();
 
 
 // *** Date & Time ***
@@ -141,7 +146,6 @@ async function getWeather() {
     try {
         const response = await fetch(url);
         const data = await response.json();
-        console.log(data);
         //удаляем все лишние классы перед добавлением нового, чтобы иконка погоды обновлялась корректно.
         weatherIcon.className = 'weather-icon owf';
         weatherIcon.classList.add(`owf-${data.weather[0].id}`);
@@ -156,6 +160,24 @@ async function getWeather() {
         city.value = prevCity;
         alert('Wrong input. Select correct city name.')
         getWeather()
+    }
+
+}
+
+
+// *** Quotes ***
+
+async function getQuotes() {
+
+    try {
+        const response = await fetch(quotes);
+        const data = await response.json();
+        const quoteNum = Math.floor(Math.random() * 101);
+        quote.textContent = data.quotes[quoteNum].quote
+        author.textContent = data.quotes[quoteNum].author
+
+    } catch (err) {
+        console.log('Not new quotes')
     }
 
 }
