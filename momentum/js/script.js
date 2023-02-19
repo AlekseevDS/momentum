@@ -6,14 +6,24 @@ const name = document.querySelector('.name')
 let randomNum = getRandomNum();
 const slidePrev = document.querySelector('.slide-prev');
 const slideNext = document.querySelector('.slide-next');
+const weatherIcon = document.querySelector('.weather-icon');
+const temperature = document.querySelector('.temperature');
+const wind = document.querySelector('.wind');
+const humidity = document.querySelector('.humidity');
+const weatherDescription = document.querySelector('.weather-description');
+const city = document.querySelector('.city');
+let prevCity = city.value;
 
 window.addEventListener('beforeunload', setLocalStorage);
 window.addEventListener('load', getLocalStorage);
 slidePrev.addEventListener('click', getSlidePrev)
 slideNext.addEventListener('click', getSlideNext)
+city.addEventListener('change', getWeather);
 
 showTime();
 setBackground();
+getWeather();
+
 
 // *** Date & Time ***
 function showTime() {
@@ -58,11 +68,16 @@ function getTimeOfDay() {
 
 function setLocalStorage() {
     localStorage.setItem('name', name.value);
+    localStorage.setItem('city', city.value);
 }
 
 function getLocalStorage() {
     if(localStorage.getItem('name')) {
         name.value = localStorage.getItem('name');
+    }
+    if(localStorage.getItem('city')) {
+        city.value = localStorage.getItem('city');
+        getWeather();
     }
 }
 
@@ -107,7 +122,6 @@ function getSlideNext() {
         randomNum++;
         bgNum = (randomNum).toString().padStart(2, "0");
     } else {
-        //bgNum = '20';
         randomNum = 1;
     }
 
@@ -116,4 +130,32 @@ function getSlideNext() {
     img.addEventListener('load', () => {
         body.style.backgroundImage = "url(" + img.src + ")";
     })
+}
+
+// *** Weather ***
+
+async function getWeather() {
+
+    const url =
+        `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=en&appid=a011aeb88485bdc0e73f33da6007a535&units=metric`;
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        console.log(data);
+        //удаляем все лишние классы перед добавлением нового, чтобы иконка погоды обновлялась корректно.
+        weatherIcon.className = 'weather-icon owf';
+        weatherIcon.classList.add(`owf-${data.weather[0].id}`);
+        temperature.textContent = `${data.main.temp.toFixed(0)}°C`;
+        weatherDescription.textContent = data.weather[0].description;
+        wind.textContent = `Wind speed: ${data.wind.speed.toFixed(0)} m/s`;
+        humidity.textContent = `Humidity: ${data.main.humidity.toFixed(0)}%`;
+
+        //console.log(data.weather[0].id, data.weather[0].description, data.main.temp);
+        prevCity = city.value;
+    } catch (err) {
+        city.value = prevCity;
+        alert('Wrong input. Select correct city name.')
+        getWeather()
+    }
+
 }
