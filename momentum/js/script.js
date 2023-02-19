@@ -66,14 +66,13 @@ function getLocalStorage() {
     }
 }
 
-
 //*** Background slider ***
 
 function setBackground() {
     const timeOfDay = getTimeOfDay();
     const bgNum = getRandomNum().toString().padStart(2, "0");
     const img = new Image();
-    img.src = `https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/${timeOfDay}/${bgNum}.jpg`
+    img.src = `https://raw.githubusercontent.com/AlekseevDS/stage1-tasks/assets/images/${timeOfDay}/${bgNum}.jpg`
     img.addEventListener('load', () => {
         body.style.backgroundImage = "url(" + img.src + ")";
     })
@@ -95,7 +94,7 @@ function getSlidePrev() {
        }
 
     const img = new Image();
-    img.src = `https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/${timeOfDay}/${bgNum}.jpg`
+    img.src = `https://raw.githubusercontent.com/AlekseevDS/stage1-tasks/assets/images/${timeOfDay}/${bgNum}.jpg`
     img.addEventListener('load', () => {
         body.style.backgroundImage = "url(" + img.src + ")";
     })
@@ -113,7 +112,7 @@ function getSlideNext() {
     }
 
     const img = new Image();
-    img.src = `https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/${timeOfDay}/${bgNum}.jpg`
+    img.src = `https://raw.githubusercontent.com/AlekseevDS/stage1-tasks/assets/images/${timeOfDay}/${bgNum}.jpg`
     img.addEventListener('load', () => {
         body.style.backgroundImage = "url(" + img.src + ")";
     })
