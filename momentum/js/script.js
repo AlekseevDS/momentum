@@ -1,7 +1,22 @@
-// *** Date & Time ***
+const body = document.querySelector('body');
+const time = document.querySelector('.time');
+const dateDiv = document.querySelector('.date');
+const greeting = document.querySelector('.greeting');
+const name = document.querySelector('.name')
+let randomNum = getRandomNum();
+const slidePrev = document.querySelector('.slide-prev');
+const slideNext = document.querySelector('.slide-next');
 
+window.addEventListener('beforeunload', setLocalStorage);
+window.addEventListener('load', getLocalStorage);
+slidePrev.addEventListener('click', getSlidePrev)
+slideNext.addEventListener('click', getSlideNext)
+
+showTime();
+setBackground();
+
+// *** Date & Time ***
 function showTime() {
-    const time = document.querySelector('.time');
     const date = new Date();
     time.textContent = date.toLocaleTimeString();
     showDate();
@@ -17,19 +32,15 @@ function showDate() {
         month: "long",
         day: "numeric",
     };
-    const currentDate = date.toLocaleDateString('en-Us', options);
-    const dateDiv = document.querySelector('.date');
-    dateDiv.textContent = currentDate;
+    dateDiv.textContent = date.toLocaleDateString('en-Us', options);
 
 }
 
 // *** Welcome ***
 
 function showGreeting() {
-    const greeting = document.querySelector('.greeting');
     const timeOfDay = getTimeOfDay();
     greeting.textContent = `Good ${timeOfDay}`;
-
 }
 
 function getTimeOfDay() {
@@ -46,17 +57,64 @@ function getTimeOfDay() {
 }
 
 function setLocalStorage() {
-    const name = document.querySelector('.name')
     localStorage.setItem('name', name.value);
 }
-window.addEventListener('beforeunload', setLocalStorage);
 
 function getLocalStorage() {
-    const name = document.querySelector('.name');
     if(localStorage.getItem('name')) {
         name.value = localStorage.getItem('name');
     }
 }
-window.addEventListener('load', getLocalStorage);
 
-showTime();
+
+//*** Background slider ***
+
+function setBackground() {
+    const timeOfDay = getTimeOfDay();
+    const bgNum = getRandomNum().toString().padStart(2, "0");
+    const img = new Image();
+    img.src = `https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/${timeOfDay}/${bgNum}.jpg`
+    img.addEventListener('load', () => {
+        body.style.backgroundImage = "url(" + img.src + ")";
+    })
+
+}
+function getRandomNum () {
+    return Math.floor(Math.random() * (20 - 1) + 1);
+}
+
+function getSlidePrev() {
+    const timeOfDay = getTimeOfDay();
+    let bgNum = 20;
+       if (randomNum > 1) {
+           randomNum--;
+           bgNum = (randomNum).toString().padStart(2, "0");
+       } else {
+           //bgNum = '20';
+           randomNum = 20;
+       }
+
+    const img = new Image();
+    img.src = `https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/${timeOfDay}/${bgNum}.jpg`
+    img.addEventListener('load', () => {
+        body.style.backgroundImage = "url(" + img.src + ")";
+    })
+}
+
+function getSlideNext() {
+    const timeOfDay = getTimeOfDay();
+    let bgNum = '01';
+    if (randomNum < 20) {
+        randomNum++;
+        bgNum = (randomNum).toString().padStart(2, "0");
+    } else {
+        //bgNum = '20';
+        randomNum = 1;
+    }
+
+    const img = new Image();
+    img.src = `https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/${timeOfDay}/${bgNum}.jpg`
+    img.addEventListener('load', () => {
+        body.style.backgroundImage = "url(" + img.src + ")";
+    })
+}
