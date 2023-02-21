@@ -16,6 +16,13 @@ const quotes = 'assets/quotes.json';
 const quote = document.querySelector('.quote');
 const author = document.querySelector('.author');
 const quoteButton = document.querySelector('.change-quote');
+let isPlay = false;
+const buttonPlay = document.querySelector('.play');
+const buttonPrev = document.querySelector('.play-prev');
+const buttonNext = document.querySelector('.play-next');
+let playNum = 0;
+const playListContainer = document.querySelector('.play-list');
+const liPlaylstArr = playListContainer.children;
 
 window.addEventListener('beforeunload', setLocalStorage);
 window.addEventListener('load', getLocalStorage);
@@ -23,11 +30,15 @@ slidePrev.addEventListener('click', getSlidePrev)
 slideNext.addEventListener('click', getSlideNext)
 city.addEventListener('change', getWeather);
 quoteButton.addEventListener('click', getQuotes);
+buttonPlay.addEventListener('click', playStopAudio);
+buttonNext.addEventListener('click', playNext);
+buttonPrev.addEventListener('click', playPrev);
 
 showTime();
 setBackground();
 getWeather();
 getQuotes();
+console.log(liPlaylstArr)
 
 
 // *** Date & Time ***
@@ -180,4 +191,88 @@ async function getQuotes() {
         console.log('Not new quotes')
     }
 
+}
+
+// *** Audio ***
+
+const audio = new Audio();
+const playList = [
+    {
+        title: 'Aqua Caelestis',
+        src: './assets/sounds/Aqua Caelestis.mp3',
+        duration: '00:58'
+    },
+    {
+        title: 'River Flows In You',
+        src: './assets/sounds/River Flows In You.mp3',
+        duration: '03:50'
+    },
+    {
+        title: 'Summer Wind',
+        src: './assets/sounds/Summer Wind.mp3',
+        duration: '01:48'
+    },
+    {
+        title: 'Ennio Morricone',
+        src: './assets/sounds/Ennio Morricone.mp3',
+        duration: '01:37'
+    }
+]
+audio.src = playList[playNum].src;
+audio.currentTime = 0;
+
+playList.forEach(el => {
+    const li = document.createElement('li');
+    playListContainer.append(li);
+    li.classList.add('play-item');
+    li.textContent = el.title;
+})
+
+
+function playStopAudio() {
+
+    liPlaylstArr[playNum].classList.add('item-active');
+
+    if (!isPlay) {
+        audio.play();
+        isPlay = true;
+        buttonPlay.classList.toggle('pause')
+    } else {
+        audio.pause()
+        isPlay = false
+        buttonPlay.classList.toggle('pause')
+    }
+}
+
+function playNext() {
+    liPlaylstArr[playNum].classList.remove('item-active');
+    if (playNum < 3) {
+        playNum++;
+    } else playNum = 0
+    //audio.currentTime = 0;
+    liPlaylstArr[playNum].classList.add('item-active');
+    audio.src = playList[playNum].src;
+    audio.play();
+
+    if (!isPlay) {
+        isPlay = true;
+        buttonPlay.classList.toggle('pause')
+    }
+
+}
+
+function playPrev() {
+    liPlaylstArr[playNum].classList.remove('item-active');
+    if (playNum > 0) {
+        playNum--;
+    } else playNum = 3
+    //audio.currentTime = 0;
+    liPlaylstArr[playNum].classList.add('item-active');
+    audio.src = playList[playNum].src;
+    audio.play();
+
+    if (!isPlay) {
+        isPlay = true;
+        buttonPlay.classList.toggle('pause')
+    }
 }
