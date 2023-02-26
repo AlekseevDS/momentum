@@ -15,9 +15,22 @@
         <button class="play-prev player-icon"></button>
         <button class="play player-icon"></button>
         <button class="play-next player-icon"></button>
+
       </div>
       <ul class="play-list"></ul>
+
     </div>
+    <button class="settings__button"></button>
+    <ul class="settings__menu display-none" >
+      <li id="ru" class="settings__item ">Russian language</li>
+      <li id="en" class="settings__item active-lang">English language</li>
+      <li id="player" class="settings__item active-lang">Player</li>
+      <li id="weather" class="settings__item active-lang">Weather</li>
+      <li id="time-date" class="settings__item active-lang">Time and Date</li>
+      <li id="greeting" class="settings__item active-lang">Greeting</li>
+      <li id="quotes" class="settings__item active-lang">Quotes</li>
+    </ul>
+
     <div class="weather">
       <input type="text" class="city" value="Minsk" />
       <i class="weather-icon owf"></i>
@@ -48,6 +61,11 @@
       <div class="quote"></div>
       <div class="author"></div>
     </div>
+    <div class="footer__links">
+      <a href="https://github.com/AlekseevDS" class="footer__git">© 2023 github</a>
+      <a href="https://rs.school/js-stage0/" class="footer__name">Rolling Scopes School</a>
+    </div>
+
   </footer>
   <script src="js/script.js"></script>
 </body>
